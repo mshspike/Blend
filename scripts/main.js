@@ -1,55 +1,47 @@
-function dectohex(oct) {
-    var hex, temp, remainder;
-    oct = parseInt(oct);
-
-    temp = Math.floor(oct / 16);
-    remainder = oct % 16;
-
-    hex = String(convertHexDigit(remainder));
-
-    if (temp > 0) {
-        remainder = temp % 16;
-        hex = String(convertHexDigit(remainder)) + hex;
+console.log($(".rgb-input").length);
+$(".rgb-input").change(function() {
+    var type = $(this).attr("type");
+    var rgb = [
+                verifyRGB($("#"+type+"_red").val()),
+                verifyRGB($("#"+type+"_green").val()),
+                verifyRGB($("#"+type+"_blue").val())
+            ];
+    if (type == "number") {
+        $("[id^=range]").each(function(i) {
+            $(this).val(rgb[i]);
+        });
     } else {
-        hex = "0" + hex;
+        $("[id^=number]").each(function(i) {
+            $(this).val(rgb[i]);
+        });
     }
-
-    return hex;
-}
-
-function convertHexDigit(digit) {
-    var ch = digit;
-    switch (digit) {
-        case 10: ch = "A"; break;
-        case 11: ch = "B"; break;
-        case 12: ch = "C"; break;
-        case 13: ch = "D"; break;
-        case 14: ch = "E"; break;
-        case 15: ch = "F"; break;
-    }
-    return ch;
-}
-
-function rgbtohex(r, g, b) {
-    return (dectohex(r) + dectohex(g) + dectohex(b));
-}
-
-function verifyRGB() {
-    return true;
-}
-
-$(document).ready(function() {
-
-    $(".input_rgb").focusout(function() {
-        var r,g,b;
-        switch ($(this).attr("name")) {
-            case "red": r = $(this).val(); break;
-            case "green": g = $(this).val(); break;
-            case "blue": b = $(this).val(); break;
-        }
-
-        console.log("rgb = " +r+g+b);
-        $("body").css("background-color", "#"+rgbtohex(r,g,b));
-    });
-
+    $("body").css("background-color", "#"+rgbtohex(rgb));
 });
+
+function rgbtohex(rgb) {
+    var hex = [];
+    $.each(rgb, function(index, value) {
+        var color = value.toString(16);
+        if (color.length < 2) { color = "0" + color; }
+        hex.push(color);
+    });
+    return (hex[0] + hex[1] + hex[2]);
+}
+
+function verifyRGB(col) {
+    var corr = 0;
+
+    if (!isNaN(col)) {
+        // is numnber
+        if (col > 255) {
+            corr = 255;
+        } else if (col < 0) {
+            corr = 0;
+        } else {
+            corr = col;
+        }
+    } else {
+        corr = 0;
+    }
+    return parseInt(corr, 10);
+}
