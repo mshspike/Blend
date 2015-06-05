@@ -1,3 +1,41 @@
-.input_rgb {
-    background-color: transparent;
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+.wrapper {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin: 0 auto -4em;
+}
+
+.footer, .push {
+    height: 4em;
+}
+
+.footer {
+    background: lighten(blue,30);
+}
+
+.color-block {
+    float: left;
+    height: 200px;
+    width: 200px;
+    padding: 20px;
+    border: #DDD solid 1px;
+    margin: 10px;
+    background: rgba(255, 255, 255, 0.5);
+
+    input[type=range] {
+        width: 100%;
+    }
+    input[type=number] {
+        width: 100%;
+        border: none;
+        font-size: 20px;
+        text-align: center;
+        font-weight: 600;
+        background: transparent;
+    }
 }

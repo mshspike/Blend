@@ -1,47 +1,53 @@
 console.log($(".rgb-input").length);
 $(".rgb-input").change(function() {
+    $(this).val(verifyColor($(this).val()));
+
     var type = $(this).attr("type");
     var rgb = [
-                verifyRGB($("#"+type+"_red").val()),
-                verifyRGB($("#"+type+"_green").val()),
-                verifyRGB($("#"+type+"_blue").val())
+                verifyColor($("#"+type+"_red").val()),
+                verifyColor($("#"+type+"_green").val()),
+                verifyColor($("#"+type+"_blue").val())
             ];
     if (type == "number") {
-        $("[id^=range]").each(function(i) {
-            $(this).val(rgb[i]);
-        });
+        $("[id^=range]").each(function(i) { $(this).val(rgb[i]); });
     } else {
-        $("[id^=number]").each(function(i) {
-            $(this).val(rgb[i]);
-        });
+        $("[id^=number]").each(function(i) { $(this).val(rgb[i]); });
     }
+    $("#number_red").css("color", "#"+colortohex(rgb[0])+"0000");
+    $("#number_green").css("color", "#00"+colortohex(rgb[1])+"00");
+    $("#number_blue").css("color", "#0000"+colortohex(rgb[2]));
     $("body").css("background-color", "#"+rgbtohex(rgb));
 });
+
+function hextorgb(hex) {
+    var rgb = [];
+    return rgb;
+}
+
+function colortohex(color) {
+    var hex = color.toString(16);
+    if (hex.length < 2) { hex = "0"+hex; }
+    return hex;
+}
 
 function rgbtohex(rgb) {
     var hex = [];
     $.each(rgb, function(index, value) {
-        var color = value.toString(16);
-        if (color.length < 2) { color = "0" + color; }
-        hex.push(color);
+        hex.push(colortohex(value));
     });
     return (hex[0] + hex[1] + hex[2]);
 }
 
-function verifyRGB(col) {
+function verifyColor(col) {
     var corr = 0;
 
-    if (!isNaN(col)) {
-        // is numnber
-        if (col > 255) {
-            corr = 255;
-        } else if (col < 0) {
-            corr = 0;
-        } else {
-            corr = col;
-        }
-    } else {
+    if ((col == "") || (col < 0)) {
         corr = 0;
+    } else if (col > 255) {
+        corr = 255;
+    } else {
+        corr = col;
     }
+
     return parseInt(corr, 10);
 }
