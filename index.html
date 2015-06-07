@@ -1,37 +1,46 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="UTF-8">
   <title>Blend</title>
   <link rel="stylesheet" type="text/css" href="stylesheets/main.css">
 </head>
 <body>
-  
-<div class="wrapper">
-  <div class="row">
-    <div class="color-block">
-      <input type="range" class="rgb-input" id="range_red" min="0" max="255" value="0">
+
+<div class="container">
+
+  <div id="block_hex" class="hex-block">
+    <input type="text" id="hex" class="hex-input" value="#000000">
+  </div>
+
+  <div id="block_red" class="rgb-block">
+    <div class="block-content">
+      <input type="range" id="range_red" class="rgb-input" min="0" max="255" value="0">
       <br />
-      <input type="number" class="rgb-input" id="number_red" min="0" max="255" value="0">
-    </div>
-    <div class="color-block">
-      <input type="range" class="rgb-input" id="range_green" min="0" max="255" value="0">
-      <br />
-      <input type="number" class="rgb-input" id="number_green" min="0" max="255" value="0">
-    </div>
-    <div class="color-block">
-      <input type="range" class="rgb-input" id="range_blue" min="0" max="255" value="0">
-      <br />
-      <input type="number" class="rgb-input" id="number_blue" min="0" max="255" value="0">
+      <input type="text" id="text_red" class="rgb-input" min="0" max="255" value="0">
     </div>
   </div>
-  <div class="push"></div>
-</div>
 
-<div class="footer">
-  123123123123123
+  <div id="block_green" class="rgb-block">
+    <div class="block-content">
+      <input type="range" id="range_green" class="rgb-input" min="0" max="255" value="0">
+      <br />
+      <input type="text" id="text_green" class="rgb-input" min="0" max="255" value="0">
+    </div>
+  </div>
+
+  <div id="block_blue" class="rgb-block">
+    <div class="block-content">
+      <input type="range" id="range_blue" class="rgb-input" min="0" max="255" value="0">
+      <br />
+      <input type="text" id="text_blue" class="rgb-input" min="0" max="255" value="0">
+    </div>
+  </div>
+
 </div>
 
 </body>
 <script type="text/javascript" src="scripts/jquery-2.1.4.min.js"></script>
 <script type="text/javascript" src="scripts/main.js"></script>
+<script type="text/javascript" src="scripts/layout.js"></script>
 </html>
