@@ -1,3 +1,7 @@
+var red   = 0;
+var green = 0;
+var blue  = 0;
+
 /**
  * Document ready function. Set a random color when page is reloaded
  */
@@ -5,11 +9,70 @@ $(document).ready(function() {
     setColor((Math.floor(Math.random()*255)),(Math.floor(Math.random()*255)),(Math.floor(Math.random()*255)));
 });
 
+$(".rgb-bubble").on("click", function(e) {
+    var this_val = $(this).children().first().children("input[type=range]").val();
+    var shift = 2;
+    if (e.pageX < ($(this).offset().left + ($(this).width() / 2)+32)) {
+        shift *= -1;
+    }
+    if ((this_val < (0-shift)) || (this_val > (255-shift))) {
+        shift = 0;
+    }
+
+    if ($(this).data("color") == "red") {
+        setColor(getRed()+shift, getGreen(), getBlue());
+    } else if ($(this).data("color") == "green") {
+        setColor(getRed(), getGreen()+shift, getBlue());
+    } else if ($(this).data("color") == "blue") {
+        setColor(getRed(), getGreen(), getBlue()+shift);
+    }
+    $(this).css("background")
+});
+
+$(".rgb-input").on("click", function(e) {
+    e.stopPropagation();
+});
+
+$(document).on("paste", function(e) {
+    var pastedText;
+    if (pastedText = e.originalEvent.clipboardData.getData('Text')) {
+        // All browsers other than IE
+        
+        if (/([0-9]{1,3}[ ,;\t]+){2}[0-9]{1,3}/.test(pastedText)) {
+            /* RGB */
+            console.log("RGB detected!");
+            var splitText = pastedText.match(/\S+/g);
+            var rgb = [];
+            $.each(splitText, function(index, value) {
+                rgb[index] = validateColor(value);
+            });
+            setTimeout(function() {
+                setColor(rgb[0], rgb[1], rgb[2]);
+            }, 100);
+        } else if (/[#]{0,1}[0-9A-Fa-f]{6}/.test(pastedText)) {
+            /* HEX */
+            console.log("HEX detected! string = " + pastedText);
+            var rgb = hextorgb(pastedText);
+            setColor(rgb[0], rgb[1], rgb[2]);
+        } else {
+            console.log("Nothing special detected...");
+        }
+
+        // Todo: use try-catch to catch typeError
+        
+    } else if (pastedText = window.clipboardData.getData('Text')) {
+        // IE
+        console.log("[win] Pasted event captured! text = " + pastedText);
+    }
+});
+
+$("[id^=text]").on("click", function() { $(this).select(); });
+
 /**
 * Capture "tab" key on the 3 RGB input.
 * It is to allow using tab key to loop through each RGB color.
 */
-$(".block-content").on("keydown", "[id^=text]", function(e) {
+$(".bubble-content").on("keydown", "[id^=text]", function(e) {
     var keyCode = e.keyCode || e.which;
     if (keyCode == 9) {
         e.preventDefault();
@@ -28,13 +91,13 @@ $(".block-content").on("keydown", "[id^=text]", function(e) {
 /**
  * Onchange listener on the 3 RGB color input.
  */
-$(".rgb-input").change(function() {
-    $(this).val(verifyColor($(this).val()));
+$(".rgb-input").on("change", function() {
+    $(this).val(validateColor($(this).val()));
 
     var type = $(this).attr("type");
-    var rgb  = [verifyColor($("#"+type+"_red").val()),
-                verifyColor($("#"+type+"_green").val()),
-                verifyColor($("#"+type+"_blue").val()) ];
+    var rgb  = [validateColor($("#"+type+"_red").val()),
+                validateColor($("#"+type+"_green").val()),
+                validateColor($("#"+type+"_blue").val()) ];
 
     if (type == "text") {
         $("[id^=range]").each(function(i) { $(this).val(rgb[i]); });
@@ -46,43 +109,56 @@ $(".rgb-input").change(function() {
     setColor(rgb[0],rgb[1],rgb[2]);
 });
 
-$("[id*=text_]").on("paste", function(e) {
-    var pastedText;
-/*
-    if (window.clipboardData && window.clipboardData.getData) { // IE
-        pastedText = window.clipboardData.getData('Text');
-    } else if (e.clipboardData && e.clipboardData.getData) {
-        pastedText = e.clipboardData.getData('text/plain');
-    }
-    console.log("pastedText = " + pastedText);
-*/
+$(".rgb-input").on("click", function() {
+    // Nothing happen. LOL
 });
 
-function setEach(color, value) {
-    var rgb = "rgb(";
-    if (color == "red") { rgb += value + ",0,0)"; }
-    else if (color == "green") { rgb += "0," + value + ",0"; }
-    else if (color == "blue") { rgb += "0,0," + value; }
-    else { console.log("Error setting color. Passed color = " + color); return false; }
-
-    $("#text_"+color).css("color", rgb);
-    $("#range_"+color).val(value);
-    $("#text_"+color).val(value);
-}
-
+/**
+ * Set final color.
+ * @param {[type]} r Red integer range 0-255
+ * @param {[type]} g Green integer range 0-255
+ * @param {[type]} b Blue integer range 0-255
+ */
 function setColor(r,g,b) {
-    // Color block text
+    function setEach(color, value) {
+        var rgb = "rgb(";
+        if (color == "red") { rgb += value + ",0,0)"; }
+        else if (color == "green") { rgb += "0," + value + ",0"; }
+        else if (color == "blue") { rgb += "0,0," + value; }
+        else { console.log("Error setting color. Passed color = " + color); return false; }
+
+        $("#text_"+color).css("color", rgb);
+        $("#range_"+color).val(value);
+        $("#text_"+color).val(value);
+    }
+
+    // Set RGB bubble text
     setEach("red",   r);
     setEach("green", g);
     setEach("blue",  b);
 
-    // Hex & Background
+    // Set hex text & background-color
     $("#hex").val("#"+rgbtohex(r,g,b));
+    //$("#hex").css("color", "rgb("+r+","+g+","+b+")");
     $("body").css("background-color","rgb("+r+","+g+","+b+")")
 }
 
 function hextorgb(hex) {
     var rgb = [];
+
+    if (hex.length == 7) {
+        if (hex[0] == "#") { hex = hex.substr(1); }
+    }
+    console.log("hex = " + hex);
+    var rgbhex = [hex[0]+hex[1],
+                  hex[2]+hex[3],
+                  hex[4]+hex[5]];
+    console.log("rgbhex = " + rgbhex);
+    $.each(rgbhex, function(index, value) {
+        rgb[index] = parseInt(value, 16);
+    });
+
+    console.log("rgb = " + rgb);
     return rgb;
 }
 
@@ -94,7 +170,7 @@ function rgbtohex(r,g,b) {
 }
 
 function colortohex(color) {
-    var hex = color.toString(16);
+    var hex = parseInt(color,10).toString(16);
     if (hex.length < 2) { hex = "0"+hex; }
     return hex;
 }
@@ -107,7 +183,7 @@ function colortohex(color) {
  * @param  {String} col Raw input from the textfield
  * @return {Integer}     Parsed integer which will be assigned back to the textfield.
  */
-function verifyColor(col) {
+function validateColor(col) {
     var parsed = parseInt(col, 10);
     var corr = 0;
     if (!isNaN(parsed)) {
@@ -117,3 +193,8 @@ function verifyColor(col) {
     }
     return corr;
 }
+
+function getIndivColor(color) { return parseInt($("#range_"+color).val(),10); }
+function getRed() { return parseInt($("#range_red").val(),10); }
+function getGreen() { return parseInt($("#range_green").val(),10); }
+function getBlue() { return parseInt($("#range_blue").val(),10); }
