@@ -1,5 +1,7 @@
 html, body { font-family: sans-serif; }
 
+body { transition: all 0.4s ease-in-out; }
+
 .container {
     padding-top: 30px;
     width: 90%;
@@ -20,14 +22,29 @@ input[type=text] {
 
 #block_hex {
     padding: 20px;
-    width: 200px;
+    width: 300px;
     margin-left: auto;
     margin-right: auto;
     .hex-input {
         background: transparent;
         border: none;
         width: 100%;
+        transition: all 0.3s ease;
+        &:hover {
+            -webkit-transform: scale(1.2);
+            -ms-transform: scale(1.2);
+            transform: scale(1.2);
+        }
     }
+}
+
+.rgb-bubble-zoom {
+    -webkit-transform: scale(1.1);
+    -ms-transform: scale(1.1);
+    transform: scale(1.1);
+    &#bubble_red { background: hsl(0, 100%, 50%); }
+    &#bubble_green { background: hsl(120, 100%, 50%); }
+    &#bubble_blue { background: hsl(240, 100%, 50%); }
 }
 
 .rgb-bubble {
@@ -36,11 +53,18 @@ input[type=text] {
     margin-left: auto; margin-right: auto;
     border-radius: 50%;
     cursor: pointer;
+    transition: all 200ms ease;
 
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+
+    &:hover {
+        -webkit-transform: scale(1.1);
+        -ms-transform: scale(1.1);
+        transform: scale(1.1);
+    }
 
     .bubble-content {
         position: relative;
@@ -57,22 +81,52 @@ input[type=text] {
     }
 }
 
+$animate-time: 2000ms;
+$nLoop: 1;
+.spin-360 {
+    -webkit-animation: spin $animate-time ease-in-out;
+    -webkit-animation-iteration-count: $nLoop;
+
+    -moz-animation: spin $animate-time ease-in-out;
+    -moz-animation-iteration-count: $nLoop;
+
+    -ms-animation: spin $animate-time ease-in-out;
+    -ms-animation-iteration-count: $nLoop;
+
+    animation: spin $animate-time ease-in-out;
+    animation-iteration-count: $nLoop;
+}
+
+@-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); -webkit-transform-origin: 50% 39%; }
+    100% { -webkit-transform: rotate(7*360deg); -webkit-transform-origin: 50% 39%; }
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); transform-origin: 50% 39%; }
+    to { transform: rotate(7*360deg); transform-origin: 50% 39%; }
+}
+
 #bubble_red {
-    background: hsl(0, 100%, 70%);
+    background: hsl(0, 100%, 60%);
     position: relative;
     &:hover { background: hsl(0, 100%, 50%); }
+    #text_red { color: red; }
 }
+
 #bubble_green {
-    background: hsl(120, 100%, 75%);
+    background: hsl(120, 100%, 65%);
     position: relative;
-    top: -10px;
+    top: -5px;
     left: -135px;
     &:hover { background: hsl(120, 100%, 50%); }
+    #text_green { color: green; }
 }
 #bubble_blue {
-    background: hsl(240, 100%, 70%);
+    background: hsl(240, 100%, 60%);
     position: relative;
-    top: -250px;
+    top: -245px;
     left: 135px;
     &:hover { background: hsl(240, 100%, 50%); }
+    #text_blue { color: blue; }
 }

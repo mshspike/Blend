@@ -1,16 +1,20 @@
 var resizeLayout = function() {
-    if ($(window).innerWidth() <= 530) {
-        $("#block_green").css("top", "30px");
-        $("#block_green").css("left", 0);
-        $("#block_blue").css("top", "60px");
-        $("#block_blue").css("left", 0);
+    if ($(window).width() <= 530) {
+        $("#bubble_green").css("top", "30px");
+        $("#bubble_green").css("left", 0);
+        $("#bubble_blue").css("top", "60px");
+        $("#bubble_blue").css("left", 0);
     } else {
-        $("#block_green").css("top", "-10px");
-        $("#block_green").css("left", "-140px");
-        $("#block_blue").css("top", "-250px");
-        $("#block_blue").css("left", "140px");
+        $("#bubble_green").css("top", "-5px");
+        $("#bubble_green").css("left", "-135px");
+        $("#bubble_blue").css("top", "-245px");
+        $("#bubble_blue").css("left", "135px");
     }
 }
 
 $(window).resize(resizeLayout);
 $(document).ready(resizeLayout);
+
+$(".rgb-input").focusin(function() { $(this).closest(".rgb-bubble").addClass("rgb-bubble-zoom"); });
+
+$(".rgb-input").focusout(function() { $(this).closest(".rgb-bubble").removeClass("rgb-bubble-zoom"); });

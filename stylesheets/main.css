@@ -1,6 +1,9 @@
 html, body {
   font-family: sans-serif; }
 
+body {
+  transition: all 0.4s ease-in-out; }
+
 .container {
   padding-top: 30px;
   width: 90%;
@@ -19,13 +22,29 @@ input[type=text] {
 
 #block_hex {
   padding: 20px;
-  width: 200px;
+  width: 300px;
   margin-left: auto;
   margin-right: auto; }
   #block_hex .hex-input {
     background: transparent;
     border: none;
-    width: 100%; }
+    width: 100%;
+    transition: all 0.3s ease; }
+    #block_hex .hex-input:hover {
+      -webkit-transform: scale(1.2);
+      -ms-transform: scale(1.2);
+      transform: scale(1.2); }
+
+.rgb-bubble-zoom {
+  -webkit-transform: scale(1.1);
+  -ms-transform: scale(1.1);
+  transform: scale(1.1); }
+  .rgb-bubble-zoom#bubble_red {
+    background: red; }
+  .rgb-bubble-zoom#bubble_green {
+    background: lime; }
+  .rgb-bubble-zoom#bubble_blue {
+    background: blue; }
 
 .rgb-bubble {
   width: 180px;
@@ -35,10 +54,15 @@ input[type=text] {
   margin-right: auto;
   border-radius: 50%;
   cursor: pointer;
+  transition: all 200ms ease;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none; }
+  .rgb-bubble:hover {
+    -webkit-transform: scale(1.1);
+    -ms-transform: scale(1.1);
+    transform: scale(1.1); }
   .rgb-bubble .bubble-content {
     position: relative;
     bottom: -60px; }
@@ -50,26 +74,56 @@ input[type=text] {
     margin-left: auto;
     margin-right: auto; }
 
+.spin-360 {
+  -webkit-animation: spin 2000ms ease-in-out;
+  -webkit-animation-iteration-count: 1;
+  -moz-animation: spin 2000ms ease-in-out;
+  -moz-animation-iteration-count: 1;
+  -ms-animation: spin 2000ms ease-in-out;
+  -ms-animation-iteration-count: 1;
+  animation: spin 2000ms ease-in-out;
+  animation-iteration-count: 1; }
+
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    -webkit-transform-origin: 50% 39%; }
+  100% {
+    -webkit-transform: rotate(2520deg);
+    -webkit-transform-origin: 50% 39%; } }
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+    transform-origin: 50% 39%; }
+  to {
+    transform: rotate(2520deg);
+    transform-origin: 50% 39%; } }
 #bubble_red {
-  background: #ff6666;
+  background: #ff3333;
   position: relative; }
   #bubble_red:hover {
     background: red; }
+  #bubble_red #text_red {
+    color: red; }
 
 #bubble_green {
-  background: #80ff80;
+  background: #4dff4d;
   position: relative;
-  top: -10px;
+  top: -5px;
   left: -135px; }
   #bubble_green:hover {
     background: lime; }
+  #bubble_green #text_green {
+    color: green; }
 
 #bubble_blue {
-  background: #6666ff;
+  background: #3333ff;
   position: relative;
-  top: -250px;
+  top: -245px;
   left: 135px; }
   #bubble_blue:hover {
     background: blue; }
+  #bubble_blue #text_blue {
+    color: blue; }
 
 /*# sourceMappingURL=main.css.map */

@@ -2,11 +2,20 @@ var red   = 0;
 var green = 0;
 var blue  = 0;
 
+$("#new_col").on("click", function() {
+    $(".bubble-block").addClass("spin-360");
+    setTimeout(function() { setRandomColor(); }, 1500);
+    setTimeout(function() { $(".bubble-block").removeClass("spin-360"); }, 2000);
+});
+
+function setRandomColor() { setColor((Math.floor(Math.random()*255)),(Math.floor(Math.random()*255)),(Math.floor(Math.random()*255))); }
+
 /**
  * Document ready function. Set a random color when page is reloaded
  */
 $(document).ready(function() {
-    setColor((Math.floor(Math.random()*255)),(Math.floor(Math.random()*255)),(Math.floor(Math.random()*255)));
+    setRandomColor();
+    $("#hex").focus();
 });
 
 $(".rgb-bubble").on("click", function(e) {
@@ -26,14 +35,11 @@ $(".rgb-bubble").on("click", function(e) {
     } else if ($(this).data("color") == "blue") {
         setColor(getRed(), getGreen(), getBlue()+shift);
     }
-    $(this).css("background")
 });
 
-$(".rgb-input").on("click", function(e) {
-    e.stopPropagation();
-});
+$(".rgb-input").on("click", function(e) { e.stopPropagation(); });
 
-$(document).on("paste", function(e) {
+$("input[type=text]").on("paste", function(e) {
     var pastedText;
     if (pastedText = e.originalEvent.clipboardData.getData('Text')) {
         // All browsers other than IE
@@ -53,7 +59,9 @@ $(document).on("paste", function(e) {
             /* HEX */
             console.log("HEX detected! string = " + pastedText);
             var rgb = hextorgb(pastedText);
-            setColor(rgb[0], rgb[1], rgb[2]);
+            setTimeout(function () {
+                setColor(rgb[0], rgb[1], rgb[2]);
+            });
         } else {
             console.log("Nothing special detected...");
         }
